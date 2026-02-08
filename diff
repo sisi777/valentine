@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Question très sérieuse 💘</title>
+  <meta name="description" content="Une question très sérieuse." />
+  <style>
+    :root { --bg1:#0f1020; --bg2:#2b1b3a; --card: rgba(255,255,255,.08); --txt:#fff; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background: radial-gradient(1200px 800px at 20% 20%, #ff4d88 0%, transparent 55%),
+                  radial-gradient(1000px 700px at 80% 30%, #7c4dff 0%, transparent 55%),
+                  linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+    .wrap{width:min(720px, 92vw); padding:24px;}
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      position:relative;
+    }
+    h1{margin:0 0 8px; font-size: clamp(28px, 4vw, 40px); letter-spacing:-.02em;}
+    p{margin:10px 0; line-height:1.5; color: rgba(255,255,255,.92);}
+    .pill{
+      display:inline-flex; gap:10px; align-items:center;
+      padding: 8px 12px; border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:14px; color: rgba(255,255,255,.9);
+    }
+    .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    button{
+      border:0; cursor:pointer;
+      padding:12px 16px; border-radius:14px;
+      font-weight:700; font-size:16px;
+      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
+    }
+    button:active{transform: scale(.98)}
+    .yes{background:#ff4d88; color:#170814;}
+    .no{background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.18);}
+    .yes:hover{filter:brightness(1.05)}
+    .no:hover{filter:brightness(1.1)}
+    .msg{
+      margin-top:16px; padding:14px 14px; border-radius:16px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.12);
+      display:none;
+    }
+    .footer{margin-top:16px; font-size:12px; color: rgba(255,255,255,.7)}
+    .hearts{
+      position:fixed; inset:0; pointer-events:none;
+      opacity:.9;
+    }
+    .heart{
+      position:absolute; font-size: 18px;
+      animation: floatUp 2.8s ease-in forwards;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.25));
+    }
+    @keyframes floatUp{
+      0%{ transform: translateY(0) scale(.9); opacity: 0;}
+      15%{opacity:1}
+      100%{ transform: translateY(-220px) scale(1.15); opacity:0;}
+    }
+    .tiny{
+      font-size:13px; color: rgba(255,255,255,.75);
+      margin-top:10px
+    }
+    a{color:#fff}
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <main class="wrap">
+    <div class="card">
+      <div class="pill">💌 Message privé • ouverture officielle le <span id="today"></span></div>
+
+      <h1 id="title">Hey <span id="herName"></span>…</h1>
+      <p id="intro"></p>
+
+      <div class="actions">
+        <button class="yes" id="btnYes">Oui, évidemment 💘</button>
+        <button class="no" id="btnNo">Non (mensonge) 🙃</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+
+      <div class="footer" id="footer"></div>
+    </div>
+  </main>
+
+  <script>
+    // ======= PERSONNALISE ICI =======
+    const YOUR_NAME = "Ton prénom";
+    const HER_NAME  = "Son prénom";
+    const DATE_LABEL = "14 février"; // ou "ce vendredi", etc.
+    const EXTRA_LINE = "Promis, je gère le programme : un truc simple, toi + moi + un moment cool.";
+    // =================================
+
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2,'0');
+    const mm = String(today.getMonth()+1).padStart(2,'0');
+    const yyyy = today.getFullYear();
+    document.getElementById("today").textContent = `${dd}/${mm}/${yyyy}`;
+
+    document.getElementById("herName").textContent = HER_NAME;
+
+    document.getElementById("intro").textContent =
+      `J’ai une question très sérieuse (et légèrement mignonne) : ` +
+      `tu veux être ma Valentine pour ${DATE_LABEL} ?`;
+
+    document.getElementById("footer").textContent =
+      `— ${YOUR_NAME}`;
+
+    const msg = document.getElementById("msg");
+    const hearts = document.getElementById("hearts");
+
+    function burstHearts(count=18){
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = ["💖","💘","💕","❤️","💝"][Math.floor(Math.random()*5)];
+        h.style.left = (Math.random()*100) + "vw";
+        h.style.top = (60 + Math.random()*25) + "vh";
+        h.style.fontSize = (14 + Math.random()*18) + "px";
+        h.style.animationDuration = (2.2 + Math.random()*1.4) + "s";
+        hearts.appendChild(h);
+        setTimeout(()=>h.remove(), 4000);
+      }
+    }
+
+    function showMessage(html){
+      msg.style.display = "block";
+      msg.innerHTML = html;
+    }
+
+    document.getElementById("btnYes").addEventListener("click", ()=>{
+      burstHearts(26);
+      showMessage(`
+        <h3 style="margin:0 0 6px;">YESSS 💘</h3>
+        <div style="opacity:.95; line-height:1.5;">
+          Trop heureux. ${EXTRA_LINE}<br><br>
+          <span class="tiny">PS : tu viens de valider officiellement un surplus de bisous.</span>
+        </div>
+      `);
+    });
+
+    // Petit troll gentil : le bouton "Non" fuit
+    const btnNo = document.getElementById("btnNo");
+    btnNo.addEventListener("mouseenter", ()=>{
+      const x = Math.random() * 240 - 120;
+      const y = Math.random() * 160 - 80;
+      btnNo.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    btnNo.addEventListener("click", ()=>{
+      burstHearts(10);
+      showMessage(`
+        <div style="opacity:.95; line-height:1.5;">
+          Hmm… j’ai comme un doute 😌<br>
+          <span class="tiny">Réessaie plutôt le bouton rose.</span>
+        </div>
+      `);
+    });
+  </script>
+</body>
+</html>
